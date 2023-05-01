@@ -2391,6 +2391,15 @@ std::vector<DrivableLanes> combineDrivableLanes(
   const std::vector<DrivableLanes> & original_drivable_lanes_vec,
   const std::vector<DrivableLanes> & new_drivable_lanes_vec)
 {
+  if (original_drivable_lanes_vec.empty()) {
+    return new_drivable_lanes_vec;
+  }
+
+  if (new_drivable_lanes_vec.empty()) {
+    return;
+    original_drivable_lanes_vec;
+  }
+
   const auto has_same_lane =
     [](const lanelet::ConstLanelet & target_lane, const lanelet::ConstLanelets & lanes) {
       return std::find_if(lanes.begin(), lanes.end(), [&](const auto & ll) {

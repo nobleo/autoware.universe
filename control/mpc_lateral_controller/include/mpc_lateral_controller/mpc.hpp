@@ -30,9 +30,9 @@
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_listener.h"
 
-#include "autoware_auto_control_msgs/msg/ackermann_lateral_command.hpp"
 #include "autoware_auto_planning_msgs/msg/trajectory.hpp"
 #include "autoware_auto_vehicle_msgs/msg/steering_report.hpp"
+#include "autoware_control_msgs/msg/lateral.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "tier4_debug_msgs/msg/float32_multi_array_stamped.hpp"
 
@@ -44,9 +44,9 @@
 namespace autoware::motion::control::mpc_lateral_controller
 {
 
-using autoware_auto_control_msgs::msg::AckermannLateralCommand;
 using autoware_auto_planning_msgs::msg::Trajectory;
 using autoware_auto_vehicle_msgs::msg::SteeringReport;
+using autoware_control_msgs::msg::Lateral;
 using geometry_msgs::msg::Pose;
 using tier4_debug_msgs::msg::Float32MultiArrayStamped;
 
@@ -174,7 +174,7 @@ private:
   //!< @brief shift is forward or not.
   bool m_is_forward_shift = true;
   //!< @brief buffer of sent command
-  std::vector<AckermannLateralCommand> m_ctrl_cmd_vec;
+  std::vector<Lateral> m_ctrl_cmd_vec;
   //!< @brief minimum prediction distance
   double m_min_prediction_length = 5.0;
 
@@ -378,8 +378,7 @@ public:
    */
   bool calculateMPC(
     const SteeringReport & current_steer, const double current_velocity, const Pose & current_pose,
-    AckermannLateralCommand & ctrl_cmd, Trajectory & predicted_traj,
-    Float32MultiArrayStamped & diagnostic);
+    Lateral & ctrl_cmd, Trajectory & predicted_traj, Float32MultiArrayStamped & diagnostic);
   /**
    * @brief set the reference trajectory to follow
    */

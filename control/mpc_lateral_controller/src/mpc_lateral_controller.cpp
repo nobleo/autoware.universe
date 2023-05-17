@@ -193,7 +193,7 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     m_current_steering.steering_tire_angle -= steering_offset_->getOffset();
   }
 
-  autoware_auto_control_msgs::msg::AckermannLateralCommand ctrl_cmd;
+  autoware_control_msgs::msg::Lateral ctrl_cmd;
   autoware_auto_planning_msgs::msg::Trajectory predicted_traj;
   tier4_debug_msgs::msg::Float32MultiArrayStamped debug_values;
 
@@ -253,8 +253,7 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   return createLateralOutput(ctrl_cmd);
 }
 
-bool MpcLateralController::isSteerConverged(
-  const autoware_auto_control_msgs::msg::AckermannLateralCommand & cmd) const
+bool MpcLateralController::isSteerConverged(const autoware_control_msgs::msg::Lateral & cmd) const
 {
   // wait for a while to propagate the trajectory shape to the output command when the trajectory
   // shape is changed.
@@ -331,19 +330,17 @@ void MpcLateralController::setTrajectory(const autoware_auto_planning_msgs::msg:
   }
 }
 
-autoware_auto_control_msgs::msg::AckermannLateralCommand
-MpcLateralController::getStopControlCommand() const
+autoware_control_msgs::msg::Lateral MpcLateralController::getStopControlCommand() const
 {
-  autoware_auto_control_msgs::msg::AckermannLateralCommand cmd;
+  autoware_control_msgs::msg::Lateral cmd;
   cmd.steering_tire_angle = static_cast<decltype(cmd.steering_tire_angle)>(m_steer_cmd_prev);
   cmd.steering_tire_rotation_rate = 0.0;
   return cmd;
 }
 
-autoware_auto_control_msgs::msg::AckermannLateralCommand
-MpcLateralController::getInitialControlCommand() const
+autoware_control_msgs::msg::Lateral MpcLateralController::getInitialControlCommand() const
 {
-  autoware_auto_control_msgs::msg::AckermannLateralCommand cmd;
+  autoware_control_msgs::msg::Lateral cmd;
   cmd.steering_tire_angle = m_current_steering.steering_tire_angle;
   cmd.steering_tire_rotation_rate = 0.0;
   return cmd;
@@ -382,8 +379,8 @@ bool MpcLateralController::isStoppedState() const
   }
 }
 
-autoware_auto_control_msgs::msg::AckermannLateralCommand MpcLateralController::createCtrlCmdMsg(
-  autoware_auto_control_msgs::msg::AckermannLateralCommand ctrl_cmd)
+autoware_control_msgs::msg::Lateral MpcLateralController::createCtrlCmdMsg(
+  autoware_control_msgs::msg::Lateral ctrl_cmd)
 {
   ctrl_cmd.stamp = node_->now();
   m_steer_cmd_prev = ctrl_cmd.steering_tire_angle;

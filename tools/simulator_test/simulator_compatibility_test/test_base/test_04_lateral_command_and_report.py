@@ -1,7 +1,7 @@
 import time
 
-from autoware_auto_control_msgs.msg import AckermannControlCommand
-from autoware_auto_control_msgs.msg import AckermannLateralCommand
+from autoware_auto_control_msgs.msg import Control
+from autoware_auto_control_msgs.msg import Lateral
 from autoware_auto_control_msgs.msg import LongitudinalCommand
 import pytest
 import rclpy
@@ -38,14 +38,12 @@ class Test04LateralCommandAndReportBase:
         }
         cls.node = rclpy.create_node("test_04_lateral_command_and_report_base")
         cls.sub = cls.node.create_subscription(
-            AckermannControlCommand,
+            Control,
             "/control/command/control_cmd",
             lambda msg: cls.msgs_rx.append(msg),
             10,
         )
-        cls.pub = cls.node.create_publisher(
-            AckermannControlCommand, "/control/command/control_cmd", QOS_RKL10TL
-        )
+        cls.pub = cls.node.create_publisher(Control, "/control/command/control_cmd", QOS_RKL10TL)
         cls.sub_steering_report = SubscriberSteeringReport()
         cls.executor = MultiThreadedExecutor()
         cls.executor.add_node(cls.sub_steering_report)
@@ -70,8 +68,8 @@ class Test04LateralCommandAndReportBase:
 
     def generate_control_msg(self, control_cmd):
         stamp = self.node.get_clock().now().to_msg()
-        msg = AckermannControlCommand()
-        lateral_cmd = AckermannLateralCommand()
+        msg = Control()
+        lateral_cmd = Lateral()
         longitudinal_cmd = LongitudinalCommand()
         lateral_cmd.stamp.sec = stamp.sec
         lateral_cmd.stamp.nanosec = stamp.nanosec
@@ -81,7 +79,7 @@ class Test04LateralCommandAndReportBase:
         ]
         longitudinal_cmd.stamp.sec = stamp.sec
         longitudinal_cmd.stamp.nanosec = stamp.nanosec
-        longitudinal_cmd.speed = control_cmd["longitudinal"]["speed"]
+        longitudinal_cmd.velocity = control_cmd["longitudinal"]["speed"]
         longitudinal_cmd.acceleration = control_cmd["longitudinal"]["acceleration"]
         longitudinal_cmd.jerk = control_cmd["longitudinal"]["jerk"]
 

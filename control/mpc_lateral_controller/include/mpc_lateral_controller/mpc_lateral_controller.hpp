@@ -34,10 +34,10 @@
 #include "trajectory_follower_base/lateral_controller_base.hpp"
 #include "vehicle_info_util/vehicle_info_util.hpp"
 
-#include "autoware_auto_control_msgs/msg/ackermann_lateral_command.hpp"
 #include "autoware_auto_planning_msgs/msg/trajectory.hpp"
 #include "autoware_auto_vehicle_msgs/msg/steering_report.hpp"
 #include "autoware_auto_vehicle_msgs/msg/vehicle_odometry.hpp"
+#include "autoware_control_msgs/msg/lateral.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -122,7 +122,7 @@ private:
   //!< @brief flag of m_ctrl_cmd_prev initialization
   bool m_is_ctrl_cmd_prev_initialized = false;
   //!< @brief previous control command
-  autoware_auto_control_msgs::msg::AckermannLateralCommand m_ctrl_cmd_prev;
+  autoware_control_msgs::msg::Lateral m_ctrl_cmd_prev;
 
   //!< @brief flag whether the first trajectory has been received
   bool m_has_received_first_trajectory = false;
@@ -160,8 +160,8 @@ private:
    * @brief create control command
    * @param [in] ctrl_cmd published control command
    */
-  autoware_auto_control_msgs::msg::AckermannLateralCommand createCtrlCmdMsg(
-    autoware_auto_control_msgs::msg::AckermannLateralCommand ctrl_cmd);
+  autoware_control_msgs::msg::Lateral createCtrlCmdMsg(
+    autoware_control_msgs::msg::Lateral ctrl_cmd);
 
   /**
    * @brief publish predicted future trajectory
@@ -178,12 +178,12 @@ private:
   /**
    * @brief get stop command
    */
-  autoware_auto_control_msgs::msg::AckermannLateralCommand getStopControlCommand() const;
+  autoware_control_msgs::msg::Lateral getStopControlCommand() const;
 
   /**
    * @brief get initial command
    */
-  autoware_auto_control_msgs::msg::AckermannLateralCommand getInitialControlCommand() const;
+  autoware_control_msgs::msg::Lateral getInitialControlCommand() const;
 
   /**
    * @brief check ego car is in stopped state
@@ -197,7 +197,7 @@ private:
 
   bool isTrajectoryShapeChanged() const;
 
-  bool isSteerConverged(const autoware_auto_control_msgs::msg::AckermannLateralCommand & cmd) const;
+  bool isSteerConverged(const autoware_control_msgs::msg::Lateral & cmd) const;
 
   rclcpp::Node::OnSetParametersCallbackHandle::SharedPtr m_set_param_res;
 

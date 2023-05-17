@@ -18,10 +18,10 @@
 #include "mpc_lateral_controller/qp_solver/qp_solver_unconstr_fast.hpp"
 #include "mpc_lateral_controller/vehicle_model/vehicle_model_bicycle_kinematics.hpp"
 
-#include "autoware_auto_control_msgs/msg/ackermann_lateral_command.hpp"
 #include "autoware_auto_planning_msgs/msg/trajectory.hpp"
 #include "autoware_auto_planning_msgs/msg/trajectory_point.hpp"
 #include "autoware_auto_vehicle_msgs/msg/steering_report.hpp"
+#include "autoware_control_msgs/msg/lateral.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "tier4_debug_msgs/msg/float32_multi_array_stamped.hpp"
 
@@ -44,7 +44,7 @@ typedef autoware_auto_planning_msgs::msg::TrajectoryPoint TrajectoryPoint;
 typedef autoware_auto_vehicle_msgs::msg::SteeringReport SteeringReport;
 typedef geometry_msgs::msg::Pose Pose;
 typedef geometry_msgs::msg::PoseStamped PoseStamped;
-typedef autoware_auto_control_msgs::msg::AckermannLateralCommand AckermannLateralCommand;
+typedef autoware_control_msgs::msg::Lateral Lateral;
 typedef tier4_debug_msgs::msg::Float32MultiArrayStamped Float32MultiArrayStamped;
 
 class MPCTest : public ::testing::Test
@@ -204,7 +204,7 @@ TEST_F(MPCTest, InitializeAndCalculate)
   initializeMPC(mpc);
 
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -239,7 +239,7 @@ TEST_F(MPCTest, InitializeAndCalculateRightTurn)
     extend_trajectory_for_end_yaw_control);
 
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -270,7 +270,7 @@ TEST_F(MPCTest, OsqpCalculate)
   ASSERT_TRUE(mpc.hasQPSolver());
 
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   // with OSQP this function returns false despite finding correct solutions
@@ -302,7 +302,7 @@ TEST_F(MPCTest, OsqpCalculateRightTurn)
   ASSERT_TRUE(mpc.hasQPSolver());
 
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -335,7 +335,7 @@ TEST_F(MPCTest, KinematicsNoDelayCalculate)
     path_filter_moving_ave_num, curvature_smoothing_num_traj, curvature_smoothing_num_ref_steer,
     extend_trajectory_for_end_yaw_control);
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -368,7 +368,7 @@ TEST_F(MPCTest, KinematicsNoDelayCalculateRightTurn)
   mpc.initializeLowPassFilters(steering_lpf_cutoff_hz, error_deriv_lpf_cutoff_hz);
 
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -395,7 +395,7 @@ TEST_F(MPCTest, DynamicCalculate)
   ASSERT_TRUE(mpc.hasQPSolver());
 
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -421,7 +421,7 @@ TEST_F(MPCTest, MultiSolveWithBuffer)
 
   mpc.m_input_buffer = {0.0, 0.0, 0.0};
   // Calculate MPC
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   ASSERT_TRUE(
@@ -465,7 +465,7 @@ TEST_F(MPCTest, FailureCases)
   Pose pose_far;
   pose_far.position.x = pose_zero.position.x - admissible_position_error - 1.0;
   pose_far.position.y = pose_zero.position.y - admissible_position_error - 1.0;
-  AckermannLateralCommand ctrl_cmd;
+  Lateral ctrl_cmd;
   Trajectory pred_traj;
   Float32MultiArrayStamped diag;
   EXPECT_FALSE(

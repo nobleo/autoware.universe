@@ -1,5 +1,5 @@
-from autoware_auto_control_msgs.msg import AckermannControlCommand
-from autoware_auto_control_msgs.msg import AckermannLateralCommand
+from autoware_auto_control_msgs.msg import Control
+from autoware_auto_control_msgs.msg import Lateral
 from autoware_auto_control_msgs.msg import LongitudinalCommand
 import rclpy
 from rclpy.node import Node
@@ -9,7 +9,7 @@ from rclpy.qos import QoSProfile
 from rclpy.qos import QoSReliabilityPolicy
 
 
-class PublisherAckermannControlCommand(Node):
+class PublisherControl(Node):
     def __init__(self):
         super().__init__("ackermann_control_command_publisher")
 
@@ -23,12 +23,12 @@ class PublisherAckermannControlCommand(Node):
             durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
         )
         self.topic = "/control/command/control_cmd"
-        self.publisher_ = self.create_publisher(AckermannControlCommand, self.topic, QOS_RKL10TL)
+        self.publisher_ = self.create_publisher(Control, self.topic, QOS_RKL10TL)
 
     def publish_msg(self, control_cmd):
         stamp = self.get_clock().now().to_msg()
-        msg = AckermannControlCommand()
-        lateral_cmd = AckermannLateralCommand()
+        msg = Control()
+        lateral_cmd = Lateral()
         longitudinal_cmd = LongitudinalCommand()
         lateral_cmd.stamp.sec = stamp.sec
         lateral_cmd.stamp.nanosec = stamp.nanosec
@@ -38,7 +38,7 @@ class PublisherAckermannControlCommand(Node):
         ]
         longitudinal_cmd.stamp.sec = stamp.sec
         longitudinal_cmd.stamp.nanosec = stamp.nanosec
-        longitudinal_cmd.speed = control_cmd["longitudinal"]["speed"]
+        longitudinal_cmd.velocity = control_cmd["longitudinal"]["speed"]
         longitudinal_cmd.acceleration = control_cmd["longitudinal"]["acceleration"]
         longitudinal_cmd.jerk = control_cmd["longitudinal"]["jerk"]
 
@@ -53,7 +53,7 @@ class PublisherAckermannControlCommand(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    node = PublisherAckermannControlCommand()
+    node = PublisherControl()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

@@ -24,7 +24,7 @@
 
 namespace
 {
-using autoware_auto_control_msgs::msg::AckermannControlCommand;
+using autoware_control_msgs::msg::Control;
 using control_performance_analysis::msg::DrivingMonitorStamped;
 using control_performance_analysis::msg::ErrorStamped;
 
@@ -62,7 +62,7 @@ ControlPerformanceAnalysisNode::ControlPerformanceAnalysisNode(
     "~/input/reference_trajectory", 1,
     std::bind(&ControlPerformanceAnalysisNode::onTrajectory, this, _1));
 
-  sub_control_cmd_ = create_subscription<AckermannControlCommand>(
+  sub_control_cmd_ = create_subscription<Control>(
     "~/input/control_raw", 1, std::bind(&ControlPerformanceAnalysisNode::onControlRaw, this, _1));
 
   sub_vehicle_steering_ = create_subscription<SteeringReport>(
@@ -96,8 +96,7 @@ void ControlPerformanceAnalysisNode::onTrajectory(const Trajectory::ConstSharedP
   current_trajectory_ptr_ = msg;
 }
 
-void ControlPerformanceAnalysisNode::onControlRaw(
-  const AckermannControlCommand::ConstSharedPtr control_msg)
+void ControlPerformanceAnalysisNode::onControlRaw(const Control::ConstSharedPtr control_msg)
 {
   static bool initialized = false;
   if (!control_msg) {

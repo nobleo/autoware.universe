@@ -53,9 +53,9 @@ void PauseInterface::publish()
   }
 }
 
-void PauseInterface::update(const AckermannControlCommand & control)
+void PauseInterface::update(const Control & control)
 {
-  is_start_requested_ = eps < std::abs(control.longitudinal.speed);
+  is_start_requested_ = eps < std::abs(control.longitudinal.velocity);
 }
 
 void PauseInterface::on_pause(

@@ -21,6 +21,8 @@
 
 namespace raw_vehicle_cmd_converter
 {
+using Control = autoware_control_msgs::msg::Control;
+
 RawVehicleCommandConverterNode::RawVehicleCommandConverterNode(
   const rclcpp::NodeOptions & node_options)
 : Node("raw_vehicle_cmd_converter_node", node_options)
@@ -76,7 +78,7 @@ RawVehicleCommandConverterNode::RawVehicleCommandConverterNode(
     steer_pid_.setInitialized();
   }
   pub_actuation_cmd_ = create_publisher<ActuationCommandStamped>("~/output/actuation_cmd", 1);
-  sub_control_cmd_ = create_subscription<AckermannControlCommand>(
+  sub_control_cmd_ = create_subscription<Control>(
     "~/input/control_cmd", 1, std::bind(&RawVehicleCommandConverterNode::onControlCmd, this, _1));
   sub_velocity_ = create_subscription<Odometry>(
     "~/input/odometry", 1, std::bind(&RawVehicleCommandConverterNode::onVelocity, this, _1));
@@ -214,7 +216,7 @@ void RawVehicleCommandConverterNode::onVelocity(const Odometry::ConstSharedPtr m
   current_twist_ptr_->twist = msg->twist.twist;
 }
 
-void RawVehicleCommandConverterNode::onControlCmd(const AckermannControlCommand::ConstSharedPtr msg)
+void RawVehicleCommandConverterNode::onControlCmd(const Control::ConstSharedPtr msg)
 {
   control_cmd_ptr_ = msg;
   publishActuationCmd();

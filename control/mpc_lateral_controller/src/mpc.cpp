@@ -30,8 +30,7 @@ using namespace std::literals::chrono_literals;
 
 bool MPC::calculateMPC(
   const SteeringReport & current_steer, const double current_velocity, const Pose & current_pose,
-  AckermannLateralCommand & ctrl_cmd, Trajectory & predicted_traj,
-  Float32MultiArrayStamped & diagnostic)
+  Lateral & ctrl_cmd, Trajectory & predicted_traj, Float32MultiArrayStamped & diagnostic)
 {
   /* recalculate velocity from ego-velocity with dynamics */
   MPCTrajectory reference_trajectory =
@@ -369,7 +368,7 @@ double MPC::getSteerCmdSum(
 void MPC::storeSteerCmd(const double steer)
 {
   const auto time_delayed = m_clock->now() + rclcpp::Duration::from_seconds(m_param.input_delay);
-  AckermannLateralCommand cmd;
+  Lateral cmd;
   cmd.stamp = time_delayed;
   cmd.steering_tire_angle = static_cast<float>(steer);
 

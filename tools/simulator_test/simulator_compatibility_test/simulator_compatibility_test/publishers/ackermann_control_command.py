@@ -1,5 +1,6 @@
 from autoware_control_msgs.msg import Control
 from autoware_control_msgs.msg import Lateral
+from autoware_control_msgs.msg import Longitudinal
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSDurabilityPolicy

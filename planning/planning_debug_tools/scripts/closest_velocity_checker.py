@@ -16,7 +16,7 @@
 
 import time
 
-from autoware_auto_control_msgs.msg import Control
+from autoware_control_msgs.msg import Control
 from autoware_auto_planning_msgs.msg import Path
 from autoware_auto_planning_msgs.msg import PathWithLaneId
 from autoware_auto_planning_msgs.msg import Trajectory

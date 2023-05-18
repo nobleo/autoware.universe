@@ -1,6 +1,5 @@
-from autoware_auto_control_msgs.msg import Control
-from autoware_auto_control_msgs.msg import Lateral
-from autoware_auto_control_msgs.msg import LongitudinalCommand
+from autoware_control_msgs.msg import Control
+from autoware_control_msgs.msg import Lateral
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSDurabilityPolicy
@@ -29,7 +28,7 @@ class PublisherControl(Node):
         stamp = self.get_clock().now().to_msg()
         msg = Control()
         lateral_cmd = Lateral()
-        longitudinal_cmd = LongitudinalCommand()
+        longitudinal_cmd = Longitudinal()
         lateral_cmd.stamp.sec = stamp.sec
         lateral_cmd.stamp.nanosec = stamp.nanosec
         lateral_cmd.steering_tire_angle = control_cmd["lateral"]["steering_tire_angle"]
@@ -38,7 +37,7 @@ class PublisherControl(Node):
         ]
         longitudinal_cmd.stamp.sec = stamp.sec
         longitudinal_cmd.stamp.nanosec = stamp.nanosec
-        longitudinal_cmd.velocity = control_cmd["longitudinal"]["speed"]
+        longitudinal_cmd.speed = control_cmd["longitudinal"]["speed"]
         longitudinal_cmd.acceleration = control_cmd["longitudinal"]["acceleration"]
         longitudinal_cmd.jerk = control_cmd["longitudinal"]["jerk"]
 

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from autoware_auto_control_msgs.msg import Control
+from autoware_control_msgs.msg import Control
 from autoware_auto_vehicle_msgs.msg import Engage
 from geometry_msgs.msg import AccelWithCovarianceStamped
 from nav_msgs.msg import Odometry

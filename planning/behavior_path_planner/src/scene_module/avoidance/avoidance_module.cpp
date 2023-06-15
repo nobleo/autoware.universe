@@ -277,7 +277,7 @@ AvoidancePlanningData AvoidanceModule::calcAvoidancePlanningData(DebugData & deb
 #endif
 
   data.reference_path = utils::resamplePathWithSpline(
-    data.reference_path_rough, parameters_->resample_interval_for_planning);
+    data.reference_path_rough, parameters_->resample_interval_for_planning, true);
 
   if (data.reference_path.points.size() < 2) {
     // if the resampled path has only 1 point, use original path.

@@ -270,6 +270,8 @@ BehaviorModuleOutput StartPlannerModule::plan()
   });
 
   if (status_.back_finished) {
+    setIsSimultaneousExecutableAsApprovedModule(true);
+    setIsSimultaneousExecutableAsCandidateModule(true);
     const double start_distance = motion_utils::calcSignedArcLength(
       path.points, planner_data_->self_odometry->pose.pose.position,
       status_.pull_out_path.start_pose.position);
@@ -283,6 +285,8 @@ BehaviorModuleOutput StartPlannerModule::plan()
       {start_distance, finish_distance}, SteeringFactor::START_PLANNER, steering_factor_direction,
       SteeringFactor::TURNING, "");
   } else {
+    setIsSimultaneousExecutableAsApprovedModule(false);
+    setIsSimultaneousExecutableAsCandidateModule(false);
     const double distance = motion_utils::calcSignedArcLength(
       path.points, planner_data_->self_odometry->pose.pose.position,
       status_.pull_out_path.start_pose.position);
@@ -394,6 +398,8 @@ BehaviorModuleOutput StartPlannerModule::planWaitingApproval()
   });
 
   if (status_.back_finished) {
+    setIsSimultaneousExecutableAsApprovedModule(true);
+    setIsSimultaneousExecutableAsCandidateModule(true);
     const double start_distance = motion_utils::calcSignedArcLength(
       stop_path.points, planner_data_->self_odometry->pose.pose.position,
       status_.pull_out_path.start_pose.position);
@@ -406,6 +412,8 @@ BehaviorModuleOutput StartPlannerModule::planWaitingApproval()
       {start_distance, finish_distance}, SteeringFactor::START_PLANNER, steering_factor_direction,
       SteeringFactor::APPROACHING, "");
   } else {
+    setIsSimultaneousExecutableAsApprovedModule(false);
+    setIsSimultaneousExecutableAsCandidateModule(false);
     const double distance = motion_utils::calcSignedArcLength(
       stop_path.points, planner_data_->self_odometry->pose.pose.position,
       status_.pull_out_path.start_pose.position);

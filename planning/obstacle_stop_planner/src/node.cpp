@@ -250,7 +250,7 @@ ObstacleStopPlannerNode::ObstacleStopPlannerNode(const rclcpp::NodeOptions & nod
     
     // Using a wall timer
     trajectory_msg_spammer_ = this->create_wall_timer(
-      std::chrono::milliseconds(5000),
+      std::chrono::milliseconds(1000),
       std::bind(&ObstacleStopPlannerNode::Trigger, this));
 
 }
@@ -286,12 +286,12 @@ void ObstacleStopPlannerNode::onPointCloud(const PointCloud2::ConstSharedPtr inp
 void ObstacleStopPlannerNode::updateLastTrajectoryMsg (const Trajectory::ConstSharedPtr input_msg){
   std::lock_guard<std::mutex> lock(mutex_);
   last_trajectory_msg_ = input_msg;
-  RCLCPP_ERROR(get_logger(), "Received new trajectory message and updated last known trajectory message!");
+  RCLCPP_INFO(get_logger(), "Received new trajectory message and updated last known trajectory message!");
 }
 
 void ObstacleStopPlannerNode::Trigger()
 {
-  RCLCPP_ERROR(get_logger(), "new scan");
+  RCLCPP_INFO(get_logger(), "new scan");
   mutex_.lock();
   // NOTE: these variables must not be referenced for multithreading
   // In case of using a wall timer

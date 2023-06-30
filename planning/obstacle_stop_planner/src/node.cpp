@@ -290,6 +290,7 @@ void ObstacleStopPlannerNode::onTrigger(const Trajectory::ConstSharedPtr input_m
     };
 
     if (!object_ptr) {
+    if (!object_ptr && node_param_.use_predicted_objects) {
       waiting("perception object");
       return;
     }

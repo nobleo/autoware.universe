@@ -220,9 +220,9 @@ ObstacleStopPlannerNode::ObstacleStopPlannerNode(const rclcpp::NodeOptions & nod
 
   sub_trajectory_ = this->create_subscription<Trajectory>(
     "~/input/trajectory", 1,
-    std::bind(&ObstacleStopPlannerNode::onTrigger, this, std::placeholders::_1),
+    // std::bind(&ObstacleStopPlannerNode::onTrigger, this, std::placeholders::_1),
     // For using wall timer
-    // std::bind(&ObstacleStopPlannerNode::updateLastTrajectoryMsg, this, std::placeholders::_1),
+    std::bind(&ObstacleStopPlannerNode::updateLastTrajectoryMsg, this, std::placeholders::_1),
     createSubscriptionOptions(this));
 
   sub_odometry_ = this->create_subscription<Odometry>(
@@ -249,9 +249,9 @@ ObstacleStopPlannerNode::ObstacleStopPlannerNode(const rclcpp::NodeOptions & nod
     current_acceleration_ptr_ = std::make_shared<AccelWithCovarianceStamped>();
     
     // Using a wall timer
-    // trajectory_msg_spammer_ = this->create_wall_timer(
-    //   std::chrono::milliseconds(5000),
-    //   std::bind(&ObstacleStopPlannerNode::Trigger, this));
+    trajectory_msg_spammer_ = this->create_wall_timer(
+      std::chrono::milliseconds(5000),
+      std::bind(&ObstacleStopPlannerNode::Trigger, this));
 
 }
 
@@ -281,21 +281,21 @@ void ObstacleStopPlannerNode::onPointCloud(const PointCloud2::ConstSharedPtr inp
   pub_obstacle_pointcloud_->publish(*obstacle_ros_pointcloud_ptr_);
 }
 
-void ObstacleStopPlannerNode::onTrigger(const Trajectory::ConstSharedPtr input_msg)
+// void ObstacleStopPlannerNode::onTrigger(const Trajectory::ConstSharedPtr input_msg)
 // If we want to use a wall timer
-// void ObstacleStopPlannerNode::updateLastTrajectoryMsg (const Trajectory::ConstSharedPtr input_msg){
-//   std::lock_guard<std::mutex> lock(mutex_);
-//   last_trajectory_msg_ = input_msg;
-//   RCLCPP_ERROR(get_logger(), "Received new trajectory message and updated last known trajectory message!");
-// }
+void ObstacleStopPlannerNode::updateLastTrajectoryMsg (const Trajectory::ConstSharedPtr input_msg){
+  std::lock_guard<std::mutex> lock(mutex_);
+  last_trajectory_msg_ = input_msg;
+  RCLCPP_ERROR(get_logger(), "Received new trajectory message and updated last known trajectory message!");
+}
 
-// void ObstacleStopPlannerNode::Trigger()
+void ObstacleStopPlannerNode::Trigger()
 {
   RCLCPP_ERROR(get_logger(), "new scan");
   mutex_.lock();
   // NOTE: these variables must not be referenced for multithreading
   // In case of using a wall timer
-  // const auto input_msg = last_trajectory_msg_;
+  const auto input_msg = last_trajectory_msg_;
   const auto vehicle_info = vehicle_info_;
   const auto stop_param = stop_param_;
   const auto obstacle_ros_pointcloud_ptr = obstacle_ros_pointcloud_ptr_;
@@ -317,10 +317,10 @@ void ObstacleStopPlannerNode::onTrigger(const Trajectory::ConstSharedPtr input_m
     }
 
     // In case of using wall timer
-    // if (!input_msg) {
-    //   waiting("For the first trajectory!");
-    //   return;
-    // }
+    if (!input_msg) {
+      waiting("For the first trajectory!");
+      return;
+    }
 
     if (!obstacle_ros_pointcloud_ptr && !node_param_.use_predicted_objects) {
       waiting("obstacle pointcloud");

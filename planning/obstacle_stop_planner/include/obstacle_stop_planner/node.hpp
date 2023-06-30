@@ -153,6 +153,12 @@ private:
   PointCloud2::SharedPtr obstacle_ros_pointcloud_ptr_{nullptr};
   PredictedObjects::ConstSharedPtr object_ptr_{nullptr};
 
+  // Using a wall timer
+  // // Because we publish it slower so let's make a wall timer for it
+  // Trajectory::ConstSharedPtr last_trajectory_msg_{nullptr};
+  // rclcpp::TimerBase::SharedPtr trajectory_msg_spammer_;
+  // void Trigger();
+
   Odometry::ConstSharedPtr current_odometry_ptr_{nullptr};
   AccelWithCovarianceStamped::ConstSharedPtr current_acceleration_ptr_{nullptr};
   bool is_driving_forward_{true};
@@ -226,6 +232,8 @@ private:
 
   // Callback
   void onTrigger(const Trajectory::ConstSharedPtr input_msg);
+  // // Using a wall timer
+  // void updateLastTrajectoryMsg(const Trajectory::ConstSharedPtr input_msg);
 
   void onOdometry(const Odometry::ConstSharedPtr input_msg);
 

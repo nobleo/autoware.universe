@@ -242,10 +242,6 @@ ObstacleStopPlannerNode::ObstacleStopPlannerNode(const rclcpp::NodeOptions & nod
     "~/input/expand_stop_range", 1,
     std::bind(&ObstacleStopPlannerNode::onExpandStopRange, this, std::placeholders::_1),
     createSubscriptionOptions(this));
-
-    // // Trying to fake acceleration data because Harvey doesn't have one
-    current_acceleration_ptr_ = std::make_shared<AccelWithCovarianceStamped>();
-    
 }
 
 void ObstacleStopPlannerNode::onPointCloud(const PointCloud2::ConstSharedPtr input_msg)
@@ -320,11 +316,7 @@ void ObstacleStopPlannerNode::onTrigger(const Trajectory::ConstSharedPtr input_m
   }
 
   const auto current_vel = current_odometry_ptr->twist.twist.linear.x;
-  // const auto current_acc = current_acceleration_ptr->accel.accel.linear.x;
-  // To set them manually
-  // const auto current_vel = 2.0;
-  const auto current_acc = 0.0;
-
+  const auto current_acc = current_acceleration_ptr->accel.accel.linear.x;
 
   // TODO(someone): support backward path
   const auto is_driving_forward = motion_utils::isDrivingForwardWithTwist(input_msg->points);

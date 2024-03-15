@@ -309,10 +309,12 @@ VoxelGridDynamicMapLoader::VoxelGridDynamicMapLoader(
     main_sub_opt);
   RCLCPP_INFO(logger_, "VoxelGridDynamicMapLoader initialized.\n");
 
+  auto qos_profile =
+    rclcpp::QoS(rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_services_default));
   client_callback_group_ =
     node->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   map_update_client_ = node->create_client<autoware_map_msgs::srv::GetDifferentialPointCloudMap>(
-    "map_loader_service", rmw_qos_profile_services_default, client_callback_group_);
+    "map_loader_service", qos_profile, client_callback_group_);
 
   while (!map_update_client_->wait_for_service(std::chrono::seconds(1)) && rclcpp::ok()) {
     RCLCPP_INFO(logger_, "service not available, waiting again ...");

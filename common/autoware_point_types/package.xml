@@ -21,7 +21,7 @@
   <depend>ament_cmake_lint_cmake</depend>
   <depend>ament_cmake_xmllint</depend>
   <depend>libpcl-all-dev</depend>
-  <depend>pcl_ros</depend><depend>libpcl-all-dev</depend>
+  <depend>pcl_ros</depend>
   <depend>point_cloud_msg_wrapper</depend>
 
   <test_depend>ament_cmake_ros</test_depend>

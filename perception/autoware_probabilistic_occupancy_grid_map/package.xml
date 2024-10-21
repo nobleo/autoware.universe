@@ -23,7 +23,7 @@
   <depend>message_filters</depend>
   <depend>nav2_costmap_2d</depend>
   <depend>nav_msgs</depend>
-  <depend>pcl_ros</depend>
+  <depend>pcl_ros</depend><depend>libpcl-all-dev</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>sensor_msgs</depend>

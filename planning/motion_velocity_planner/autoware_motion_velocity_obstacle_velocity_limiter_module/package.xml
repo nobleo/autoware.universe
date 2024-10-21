@@ -27,7 +27,7 @@
   <depend>lanelet2_core</depend>
   <depend>libboost-dev</depend>
   <depend>nav_msgs</depend>
-  <depend>pcl_ros</depend>
+  <depend>pcl_ros</depend><depend>libpcl-all-dev</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>

@@ -25,7 +25,7 @@
   <depend>autoware_vehicle_info_utils</depend>
   <depend>libopencv-dev</depend>
   <depend>pcl_conversions</depend>
-  <depend>pcl_ros</depend>
+  <depend>pcl_ros</depend><depend>libpcl-all-dev</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>sensor_msgs</depend>

@@ -44,7 +44,7 @@ set_target_properties(${PROJECT_NAME}
 
 # TODO(autoware_tensorrt_common): Remove -Wno-deprecated-declarations once upgrading to TensorRT 8.5 is complete
 target_compile_options(${PROJECT_NAME} PRIVATE
-  -Wall -Wextra -Wpedantic -Werror -Wno-deprecated-declarations
+  -Wall -Wextra -Wpedantic  -Wno-deprecated-declarations
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE

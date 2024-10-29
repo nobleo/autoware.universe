@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.14)
 project(autoware_perception_rviz_plugin)
 
 find_package(autoware_cmake REQUIRED)
+find_package(autoware_perception_msgs REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(rviz_common REQUIRED)
+find_package(rviz_default_plugins REQUIRED)
+find_package(visualization_msgs REQUIRED)
 autoware_package()
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets)

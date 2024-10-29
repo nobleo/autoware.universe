@@ -14,6 +14,10 @@ target_link_libraries(mock_data_parser
   yaml-cpp
 )
 
+target_link_libraries(autoware_test_utils
+  yaml-cpp
+)
+
 if(BUILD_TESTING)
   ament_auto_add_gtest(test_autoware_test_utils
     test/test_mock_data_parser.cpp

@@ -9,6 +9,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wno-nonportable-include-path)
 endif()
 
+# -Werror breaks on Jazzy
+add_compile_options(-Wno-error)
+
 ### Find Eigen Dependencies
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3 REQUIRED)

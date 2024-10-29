@@ -10,6 +10,10 @@ ament_auto_add_library(autoware_test_utils SHARED
 ament_auto_add_library(mock_data_parser SHARED
   src/mock_data_parser.cpp)
 
+target_link_libraries(autoware_test_utils
+  yaml-cpp
+)
+
 target_link_libraries(mock_data_parser
   yaml-cpp
 )

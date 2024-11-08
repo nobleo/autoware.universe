@@ -22,7 +22,6 @@
             </composable_node>
 
         <!-- Separate components for time sync and concatenation -->
-        <group if="$(var separate_concatenate_node_and_time_sync_node)">
         <composable_node if="$(var separate_concatenate_node_and_time_sync_node)" pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudDataSynchronizerComponent" name="synchronizer_filter" namespace="">
             <remap from="~/input/twist" to="/sensing/vehicle_velocity_converter/twist_with_covariance" />
             <remap from="output" to="/points_raw/concatenated" />

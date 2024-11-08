@@ -32,7 +32,7 @@ launch/
 │   ├── gnss.launch.xml # GNSS
 │   ├── imu.launch.xml # IMU
 │   ├── lidar.launch.xml # LiDAR
-│   └── pointcloud_preprocessor.launch.py # for preprocessing pointcloud
+│   └── pointcloud_preprocessor.launch.xml # for preprocessing pointcloud
 ...
 ```
 

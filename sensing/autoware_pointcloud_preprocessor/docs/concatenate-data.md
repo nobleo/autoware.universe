@@ -47,7 +47,7 @@ The figure below represents the reception time of each sensor data and how it is
 
 ## Actual Usage
 
-For the example of actual usage of this node, please refer to the [preprocessor.launch.py](../launch/preprocessor.launch.py) file.
+For the example of actual usage of this node, please refer to the [preprocessor.launch.xml](../launch/preprocessor.launch.xml) file.
 
 ### How to tuning timeout_sec and input_offset
 

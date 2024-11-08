@@ -15,6 +15,8 @@
   <arg name="min_z" default="0.0" description="Crop Box Limit Min in Z"/>
   <arg name="max_z" default="2.5" description="Crop Box Limit Max in Z"/>
   <arg name="negative" default="true" description="Crop zone: false->remove outside | true->remove inside"/>
+  <arg name="use_multiple_inputs" default="false" description="Set true if using multiple input topics." />
+  <arg name="input_points_raw" default="/points_raw" description="define as string_array"/>
 
       <node_container pkg="rclcpp_components" exec="component_container" name="pointcloud_preprocessor_container" namespace="pointcloud_preprocessor">
         <!-- Conditional: Check if concatenate and time sync nodes should be separated -->
@@ -43,9 +45,24 @@
             <param name="approximate_sync" value="true" />
         </composable_node>
 
-        <!-- CropBox filter component -->
-        <composable_node pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::CropBoxFilterComponent" name="crop_box_filter" namespace="">
+        <!-- CropBox filter component (Multiple Inputs) -->
+        <composable_node  if="$(var use_multiple_inputs)" pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::CropBoxFilterComponent" name="crop_box_filter" namespace="">
             <remap from="input" to="/points_raw/concatenated" />
+            <remap from="output" to="$(var output_points_raw)" />
+            <param name="input_frame" value="$(var tf_output_frame)" />
+            <param name="output_frame" value="$(var tf_output_frame)" />
+            <param name="min_x" value="$(var min_x)" />
+            <param name="max_x" value="$(var max_x)" />
+            <param name="min_y" value="$(var min_y)" />
+            <param name="max_y" value="$(var max_y)" />
+            <param name="min_z" value="$(var min_z)" />
+            <param name="max_z" value="$(var max_z)" />
+            <param name="negative" value="$(var negative)" />
+        </composable_node>
+
+        <!-- CropBox filter component (One Input) -->
+        <composable_node  unless="$(var use_multiple_inputs)" pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::CropBoxFilterComponent" name="crop_box_filter" namespace="">
+            <remap from="input" to="$(var input_points_raw)" />
             <remap from="output" to="$(var output_points_raw)" />
             <param name="input_frame" value="$(var tf_output_frame)" />
             <param name="output_frame" value="$(var tf_output_frame)" />

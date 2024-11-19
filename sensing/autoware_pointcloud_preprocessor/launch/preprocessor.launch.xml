@@ -5,52 +5,45 @@
      "['/points_raw0', '/points_raw1', '/points_raw2', ...]"
      This syntax is also available from command line -->
     <arg name="input_points_raw_list" default="['/points_raw']" description="define as string_array"/>
-    <arg name="input_points_raw" default="/points_raw" description="define as string_array"/>
     <arg name="output_points_raw" default="/points_raw/cropbox/filtered" description=""/>
     <arg name="tf_output_frame" default="base_link" description=""/>
     <arg name="separate_concatenate_node_and_time_sync_node" default="true" description=""/>
-    <arg name="use_multiple_inputs" default="false" description="Set true if using multiple input topics." />
    
     <node pkg="rclcpp_components" exec="component_container" name="pointcloud_preprocessor_container" >
     </node>
     <!-- Conditional: Check if concatenate and time sync nodes should be separated -->
-    <group if="$(var use_multiple_inputs)">
-        <load_composable_node if="$(var separate_concatenate_node_and_time_sync_node)" target="pointcloud_preprocessor_container">
-            <!-- Separate components for time sync and concatenation -->
-            <composable_node  pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudDataSynchronizerComponent" name="synchronizer_filter" namespace="">
-                <remap from="~/input/twist" to="/sensing/vehicle_velocity_converter/twist_with_covariance" />
-                <remap from="output" to="/points_raw/concatenated" />
-                <param name="input_topics" value="$(var input_points_raw_list)" />
-                <param name="output_frame" value="$(var tf_output_frame)" />
-                <param name="approximate_sync" value="true" />
-            </composable_node>
-            <composable_node  pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudConcatenationComponent" name="concatenate_filter" namespace="">
-                <remap from="output" to="/points_raw/concatenated" />
-                <param name="input_topics" value="$(var input_points_raw_list)" />
-                <param name="output_frame" value="$(var tf_output_frame)" />
-                <param name="approximate_sync" value="true" />
-            </composable_node>
-        </load_composable_node>   
+    <load_composable_node if="$(var separate_concatenate_node_and_time_sync_node)" target="pointcloud_preprocessor_container">
+        <!-- Separate components for time sync and concatenation -->
+        <composable_node  pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudDataSynchronizerComponent" name="synchronizer_filter" namespace="">
+            <remap from="~/input/twist" to="/sensing/vehicle_velocity_converter/twist_with_covariance" />
+            <remap from="output" to="/points_raw/concatenated" />
+            <param name="input_topics" value="$(var input_points_raw_list)" />
+            <param name="output_frame" value="$(var tf_output_frame)" />
+            <param name="approximate_sync" value="true" />
+        </composable_node>
+        <composable_node  pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudConcatenationComponent" name="concatenate_filter" namespace="">
+            <remap from="output" to="/points_raw/concatenated" />
+            <param name="input_topics" value="$(var input_points_raw_list)" />
+            <param name="output_frame" value="$(var tf_output_frame)" />
+            <param name="approximate_sync" value="true" />
+        </composable_node>
+    </load_composable_node>   
 
-        <load_composable_node unless="$(var separate_concatenate_node_and_time_sync_node)" target="pointcloud_preprocessor_container">
-            <composable_node pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudConcatenateDataSynchronizerComponent" name="sync_and_concatenate_filter" namespace="">
-                <remap from="~/input/twist" to="/sensing/vehicle_velocity_converter/twist_with_covariance" />
-                <remap from="output" to="/points_raw/concatenated" />
-                <param name="input_topics" value="$(var input_points_raw_list)" />
-                <param name="output_frame" value="$(var tf_output_frame)" />
-                <param name="approximate_sync" value="true" />
-                <param name="publish_synchronized_pointcloud" value="false" />
-                <param name="input_twist_topic_type" value="twist" />
-            </composable_node>
-        </load_composable_node>   
-    </group>
-
-    <let name="input_crop" value="$(var input_points_raw)" unless="$(var use_multiple_inputs)"/>
-    <let name="input_crop" value="$(var input_points_raw_list)" if="$(var use_multiple_inputs)"/>
+    <load_composable_node unless="$(var separate_concatenate_node_and_time_sync_node)" target="pointcloud_preprocessor_container">
+        <composable_node pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::PointCloudConcatenateDataSynchronizerComponent" name="sync_and_concatenate_filter" namespace="">
+            <remap from="~/input/twist" to="/sensing/vehicle_velocity_converter/twist_with_covariance" />
+            <remap from="output" to="/points_raw/concatenated" />
+            <param name="input_topics" value="$(var input_points_raw_list)" />
+            <param name="output_frame" value="$(var tf_output_frame)" />
+            <param name="approximate_sync" value="true" />
+            <param name="publish_synchronized_pointcloud" value="false" />
+            <param name="input_twist_topic_type" value="twist" />
+        </composable_node>
+    </load_composable_node>   
 
     <load_composable_node target="pointcloud_preprocessor_container">
         <composable_node pkg="autoware_pointcloud_preprocessor" plugin="autoware::pointcloud_preprocessor::CropBoxFilterComponent" name="crop_box_filter" namespace="">
-        <remap from="input" to="$(var input_crop)" />
+        <remap from="input" to="/points_raw/concatenated" />
         <remap from="output" to="$(var output_points_raw)" />
         <param name="input_frame" value="$(var tf_output_frame)" />
         <param name="output_frame" value="$(var tf_output_frame)" />

@@ -5,9 +5,11 @@
      "['/points_raw0', '/points_raw1', '/points_raw2', ...]"
      This syntax is also available from command line -->
     <arg name="input_points_raw_list" default="['/points_raw']" description="define as string_array"/>
+    <arg name="input_points_raw" default="/points_raw" description="define as string"/>
     <arg name="output_points_raw" default="/points_raw/cropbox/filtered" description=""/>
     <arg name="tf_output_frame" default="base_link" description=""/>
     <arg name="separate_concatenate_node_and_time_sync_node" default="true" description=""/>
+    <arg name="config_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/crop_box_filter_node.param.yaml" description="Path to config file"/>
    
     <node pkg="rclcpp_components" exec="component_container" name="pointcloud_preprocessor_container" >
     </node>
@@ -47,13 +49,7 @@
         <remap from="output" to="$(var output_points_raw)" />
         <param name="input_frame" value="$(var tf_output_frame)" />
         <param name="output_frame" value="$(var tf_output_frame)" />
-        <param name="min_x" value="-3.0" />
-        <param name="max_x" value="3.0" />
-        <param name="min_y" value="-2.0" />
-        <param name="max_y" value="3.0" />
-        <param name="min_z" value="0.0" />
-        <param name="max_z" value="2.5" />
-        <param name="negative" value="true" />
+        <param from="$(var config_file)"/> 
         </composable_node>
     </load_composable_node>  
 </launch>

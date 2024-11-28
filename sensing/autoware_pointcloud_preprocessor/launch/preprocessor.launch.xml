@@ -9,7 +9,6 @@
     <arg name="output_points_raw" default="/points_raw/cropbox/filtered" description=""/>
     <arg name="tf_output_frame" default="base_link" description=""/>
     <arg name="separate_concatenate_node_and_time_sync_node" default="true" description=""/>
-    <arg name="use_multiple_inputs" default="false" description="Set true if using multiple input topics." />
     <arg name="min_x" default="-3.0" description="Crop Box Limit Min in X"/>
     <arg name="max_x" default="3.0" description="Crop Box Limit Max in X"/>
     <arg name="min_y" default="-2.0" description="Crop Box Limit Min in Y"/>

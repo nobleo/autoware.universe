@@ -9,6 +9,7 @@ autoware_package()
 find_package(Boost REQUIRED)
 
 find_package(fmt REQUIRED)
+add_compile_options(-Wno-error=uninitialized)
 
 ament_auto_add_library(autoware_universe_utils SHARED
   src/geometry/alt_geometry.cpp

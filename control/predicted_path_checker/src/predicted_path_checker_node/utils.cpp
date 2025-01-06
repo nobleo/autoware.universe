@@ -17,6 +17,8 @@
 #include <boost/format.hpp>
 #include <boost/geometry/algorithms/convex_hull.hpp>
 
+#include <utility>
+
 namespace utils
 {
 

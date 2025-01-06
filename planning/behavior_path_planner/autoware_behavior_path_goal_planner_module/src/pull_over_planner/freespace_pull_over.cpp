@@ -48,22 +48,21 @@ FreespacePullOver::FreespacePullOver(
     vehicle_info, parameters.vehicle_shape_margin);
   if (parameters.freespace_parking_algorithm == "astar") {
     planner_ = std::make_unique<AstarSearch>(
-      parameters.freespace_parking_common_parameters, vehicle_shape, parameters.astar_parameters);
+      parameters.freespace_parking_common_parameters, vehicle_shape, parameters.astar_parameters,
+      node.get_clock());
   } else if (parameters.freespace_parking_algorithm == "rrtstar") {
     planner_ = std::make_unique<RRTStar>(
-      parameters.freespace_parking_common_parameters, vehicle_shape,
-      parameters.rrt_star_parameters);
+      parameters.freespace_parking_common_parameters, vehicle_shape, parameters.rrt_star_parameters,
+      node.get_clock());
   }
 }
 
 std::optional<PullOverPath> FreespacePullOver::plan(
   const GoalCandidate & modified_goal_pose, const size_t id,
   const std::shared_ptr<const PlannerData> planner_data,
-  [[maybe_unused]] const BehaviorModuleOutput & previous_module_output)
+  [[maybe_unused]] const BehaviorModuleOutput & upstream_module_output)
 {
   const Pose & current_pose = planner_data->self_odometry->pose.pose;
-
-  planner_->setMap(*planner_data->costmap);
 
   // offset goal pose to make straight path near goal for improving parking precision
   // todo: support straight path when using back

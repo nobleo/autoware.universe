@@ -11,8 +11,10 @@ ament_auto_add_library(vehicle_info_utils SHARED
 
 if(BUILD_TESTING)
   file(GLOB_RECURSE test_files test/**/*.cpp)
+  find_package(ament_index_cpp REQUIRED)
 
   ament_add_ros_isolated_gtest(test_${PROJECT_NAME} test/test_vehicle_info_utils.cpp)
+  ament_target_dependencies(test_${PROJECT_NAME} ament_index_cpp)
 
   target_link_libraries(test_${PROJECT_NAME}
     vehicle_info_utils

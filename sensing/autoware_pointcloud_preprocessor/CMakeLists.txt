@@ -4,6 +4,8 @@ project(autoware_pointcloud_preprocessor)
 find_package(autoware_cmake REQUIRED)
 autoware_package()
 
+add_compile_options(-Wno-deprecated-declarations -Wno-error -Wno-error=cpp)
+
 # Suppress CGAL warning
 set(CGAL_DATA_DIR ".")
 

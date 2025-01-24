@@ -6,6 +6,8 @@ option(BUILD_EXAMPLES "Build examples" OFF)
 find_package(autoware_cmake REQUIRED)
 autoware_package()
 
+add_compile_options(-Wno-error)
+
 find_package(Boost REQUIRED)
 
 find_package(fmt REQUIRED)

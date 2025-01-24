@@ -4,6 +4,8 @@ project(autoware_ground_segmentation)
 find_package(autoware_cmake REQUIRED)
 autoware_package()
 
+add_compile_options(-Wno-error=cpp)
+
 find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED)

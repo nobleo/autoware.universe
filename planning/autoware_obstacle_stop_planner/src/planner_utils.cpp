@@ -30,6 +30,9 @@
 
 #include <algorithm>
 #include <limits>
+#include <map>
+#include <string>
+#include <utility>
 
 namespace autoware::motion_planning
 {

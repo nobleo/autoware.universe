@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cfloat>
-
 #include "autoware/pointcloud_preprocessor/downsample_filter/faster_voxel_grid_downsample_filter.hpp"
 
 #include <cfloat>
+#include <unordered_map>
 
 namespace autoware::pointcloud_preprocessor
 {

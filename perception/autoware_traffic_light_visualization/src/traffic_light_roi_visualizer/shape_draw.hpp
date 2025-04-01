@@ -16,7 +16,11 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 
+#if __has_include(<cv_bridge/cv_bridge.hpp>)
+#include <cv_bridge/cv_bridge.hpp>
+#else
 #include <cv_bridge/cv_bridge.h>
+#endif
 #include <opencv2/imgproc/imgproc_c.h>
 
 #include <functional>
@@ -163,7 +167,7 @@ inline ShapeImgParam crossImgParam()
 /**
  * @brief Load parameter of unknown shape.
  *
- * @return Parameter of unkown shape.
+ * @return Parameter of unknown shape.
  */
 inline ShapeImgParam unknownImgParam()
 {
